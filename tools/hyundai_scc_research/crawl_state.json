@@ -1,0 +1,9 @@
+{
+  "session_start": "2026-03-31",
+  "goal": "Find SCC radar ECU firmware updates for Hyundai/Kia/Genesis 2020+",
+  "search_terms": ["SCC", "SCC ECU", "radar ECU", "smart cruise control software", "FCA ECU", "RSCC", "ADAS ECU", "SCC update", "radar software"],
+  "sources": ["TSB", "Campaign", "Detail Search"],
+  "found_bulletins": [],
+  "downloaded_docs": [],
+  "status": "in_progress"
+}

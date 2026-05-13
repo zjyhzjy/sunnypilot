@@ -1,0 +1,24 @@
+{
+  "scan_date": "2026-03-31",
+  "total_entries_scanned": 994,
+  "total_pages": 48,
+  "source": "https://www.hyundaitechinfo.com/ecu_update/list.aspx",
+  "priority_hits": [
+    {"no": "1058", "title": "NER SCCU LOGIC IMPROVEMENT(PORT)", "notes": "SCCU=Smart Cruise Control Unit, NER=IONIQ5 Robotaxi - HIGHEST PRIORITY"},
+    {"no": "813",  "title": "CN7 1.6T REAR CORNER RADAR LOGIC IMPROVEMENT (RH)", "notes": "Rear corner radar ECU firmware, CN7=Elantra 2021+"},
+    {"no": "812",  "title": "CN7 1.6T REAR CORNER RADAR LOGIC IMPROVEMENT (LH)", "notes": "Rear corner radar ECU firmware, CN7=Elantra 2021+"},
+    {"no": "1136", "title": "SX2 25MY FCA AND LKA LOGIC IMPROVEMENT", "notes": "FCA=Forward Collision Avoidance (front radar/cam), SX2=Kona 2025MY"},
+    {"no": "883",  "title": "DN8 / DN8a N-Line ICU UPGRADE (FCA-JT)", "notes": "FCA-JT=Junction Turning, DN8=Sonata 2020-2022"},
+    {"no": "470",  "title": "OS FCA MALFUNCTION LAMP ON(C1620) IMPROVEMENT", "notes": "FCA ECU fix, OS=Kona 2018-2023"},
+    {"no": "594",  "title": "DN8A - RSPA CONTROL LOGIC IMPROVEMENT(ADAS_PRK)", "notes": "RSPA parking assist ADAS"},
+    {"no": "1139", "title": "CN7 HEV HCULDC LOGIC IMPROVEMENT (CRUISE CONTROL LOGIC IMPROVEMENT)", "notes": "HCU cruise control logic"},
+    {"no": "469",  "title": "OS 1.6T-GDI - CRUISE CONTROL LOGIC IMPROVEMENT", "notes": "Cruise control logic"},
+    {"no": "449",  "title": "LF HEV HCULDC - AUTO CRUISE CONTROL LOGIC IMPROVEMENT", "notes": "HEV cruise control"},
+    {"no": "341",  "title": "HG 3.3GDI 6AT AUTO CRUISE LOGIC IMPROVEMENT(TCU)", "notes": "TCU-based, lower priority"}
+  ],
+  "next_steps": [
+    "Navigate to each SCCU/radar entry to find firmware file downloads",
+    "Check if J2534 flash files are available for download",
+    "Cross-reference part numbers with known SCC ECU part numbers (95900-xxx series)"
+  ]
+}

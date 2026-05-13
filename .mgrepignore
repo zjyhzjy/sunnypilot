@@ -1,0 +1,53 @@
+# Binary / compiled artifacts — do not embed
+*.dll
+*.DLL
+*.exe
+*.EXE
+*.so
+*.o
+*.a
+*.lib
+*.pyd
+*.pyc
+*.pyo
+__pycache__/
+
+# Reverse engineering working directories
+~/
+~/re/
+re/
+tools/hyundai_scc_research/
+
+# Large model / data files
+*.onnx
+*.tflite
+*.weights
+*.bin
+*.dat
+*.db
+*.db3
+*.sqlite
+*.sqlite3
+
+# Build outputs
+build/
+dist/
+*.egg-info/
+.mypy_cache/
+.tox/
+
+# Media
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.svg
+*.ico
+*.mp4
+*.mp3
+*.wav
+
+# Third-party vendored code (large, not our code)
+tinygrad_repo/
+opendbc_repo/
+third_party/
