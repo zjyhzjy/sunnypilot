@@ -1,0 +1,142 @@
+Custom sunnypilot Branch + SSH Installation Guide
+1. Create Your Own sunnypilot Branch
+Go to Official repo and Click: Fork
+
+This creates:
+  https://github.com/YOURNAME/sunnypilot
+
+Clone your fork locally
+  git clone https://github.com/YOURNAME/sunnypilot.git
+  cd sunnypilot
+
+Add official repo as upstream
+  git remote add upstream https://github.com/sunnypilot/sunnypilot.git
+  git fetch upstream
+
+Create your custom branch from official release
+  git checkout -b mazdafix upstream/release-mici
+
+This creates:
+
+  mazdafix
+
+based on the latest official:
+
+  release-mici
+2. Apply Mazda Standstill Alert Fix
+High-level change summary
+
+The Mazda CX-5 2022+ allows LKAS steering at 0 mph (minSteerSpeed = 0).
+
+During EPS startup at standstill:
+
+Mazda EPS temporarily reports:
+LKAS_BLOCK = True
+
+Original sunnypilot logic incorrectly interpreted this as a steering fault, causing:
+
+"Place Hands on Wheel"
+
+alerts during stop-and-go traffic.
+
+Fix concept
+
+The patch:
+
+adds an EPS initialization filter
+waits until LKAS successfully initializes once
+ignores temporary startup LKAS_BLOCK states
+includes a timeout so real hardware faults are still detected
+
+Only one file was modified:
+
+opendbc_repo/opendbc/car/mazda/carstate.py
+Apply patch
+git apply mazda_fix.patch
+
+Verify:
+
+git diff
+
+Commit:
+
+git add .
+git commit -m "Add Mazda standstill LKAS init fix"
+
+Push branch:
+
+git push origin mazdafix
+3. SSH Installation on comma 4
+Generate SSH Key on Windows
+
+Open PowerShell:
+
+  ssh-keygen -t ed25519
+
+Press Enter through all prompts.
+
+Default location:
+
+  C:\Users\YOURNAME\.ssh\id_ed25519
+Show Public Key
+  cat ~/.ssh/id_ed25519.pub
+
+Copy the ENTIRE output line.
+
+Example:
+
+  ssh-ed25519 AAAAC3NzaC1... USER@PC
+Add SSH Key to GitHub
+
+Go here:
+
+GitHub SSH Keys
+
+Click:
+
+New SSH Key
+
+Paste the public key.
+
+Enable SSH Access on comma
+
+On comma:
+
+Settings → Developer → SSH Keys
+
+Enter your GitHub username.
+
+comma automatically downloads your public SSH keys from GitHub.
+
+SSH Into comma
+
+Find comma IP:
+
+Settings → Network
+
+Then from PowerShell:
+
+ssh comma@192.168.X.XXX
+
+Successful login looks like:
+
+comma@tici:~$
+4. Install Your Custom sunnypilot Branch
+Backup existing install
+cd /data
+mv openpilot openpilot_backup
+Clone your custom branch
+git clone -b mazdafix --recurse-submodules https://github.com/YOURNAME/sunnypilot.git openpilot
+Pull Git LFS files
+cd openpilot
+git lfs pull
+Reboot comma
+sudo reboot
+5. Recovery (If Something Breaks)
+
+SSH into comma again:
+
+cd /data
+rm -rf openpilot
+mv openpilot_backup openpilot
+sudo reboot
