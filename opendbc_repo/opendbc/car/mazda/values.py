@@ -13,16 +13,34 @@ Ecu = CarParams.Ecu
 # Steer torque limits
 
 class CarControllerParams:
-  STEER_MAX = 800                # theoretical max_steer 2047
-  STEER_DELTA_UP = 10             # torque increase per refresh
-  STEER_DELTA_DOWN = 25           # torque decrease per refresh
+  # Parameters shared across all Mazda platforms
   STEER_DRIVER_ALLOWANCE = 15     # allowed driver torque before start limiting
   STEER_DRIVER_MULTIPLIER = 1     # weight driver torque
   STEER_DRIVER_FACTOR = 1         # from dbc
   STEER_STEP = 1  # 100 Hz
 
   def __init__(self, CP):
-    pass
+    # Per-model STEER_MAX and rate limits. Instance-based so each model can be
+    # tuned independently. carcontroller.py reads self.params.STEER_MAX (instance)
+    # instead of CarControllerParams.STEER_MAX (class) to pick these up.
+    #
+    # CX-5 2022 EPS (also valid for 2018 CX-5 body + 2022 EPS swap):
+    #   STEER_MAX kept at 800 to match pre-compiled panda firmware binary
+    #   (panda_h7/main.bin) shipped with sunnypilot staging. Panda safety
+    #   limit in mazda.h must be recompiled before raising above 800 —
+    #   otherwise panda rejects the command and latches a safety fault
+    #   requiring engine restart to clear.
+    #   Target once firmware recompiled: STEER_MAX=1400, DELTA_UP=15,
+    #   DELTA_DOWN=38 — validated by zephleggett on CX-5 2022 (commit 741f049).
+    if CP.carFingerprint == CAR.MAZDA_CX5_2022:
+      self.STEER_MAX = 800         # TODO: raise to 1400 after mazda.h recompile
+      self.STEER_DELTA_UP = 10     # TODO: raise to 15 after mazda.h recompile
+      self.STEER_DELTA_DOWN = 25   # TODO: raise to 38 after mazda.h recompile
+    else:
+      # All other Mazda platforms — unchanged from official defaults
+      self.STEER_MAX = 800         # theoretical max_steer 2047
+      self.STEER_DELTA_UP = 10     # torque increase per refresh
+      self.STEER_DELTA_DOWN = 25   # torque decrease per refresh
 
 
 @dataclass
