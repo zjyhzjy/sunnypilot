@@ -5,7 +5,7 @@ on:
     paths:
       - 'opendbc_repo/opendbc/safety/modes/mazda.h'
       - 'panda/**'
-  workflow_dispatch:  # allow manual trigger
+  workflow_dispatch:
 
 jobs:
   build:
@@ -25,16 +25,11 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install scons pycryptodome
+          pip install -e opendbc_repo/
 
       - name: Build panda firmware
-        run: |
-          cd panda
-          scons -j$(nproc)
-
-      - name: Copy compiled binary to repo
-        run: |
-          cp panda/board/obj/panda_h7/main.bin panda/board/obj/panda_h7/main.bin
-          cp panda/board/obj/bootstub.panda_h7.bin panda/board/obj/bootstub.panda_h7.bin
+        working-directory: panda
+        run: scons -j$(nproc)
 
       - name: Commit updated firmware binary
         uses: stefanzweifel/git-auto-commit-action@v5
