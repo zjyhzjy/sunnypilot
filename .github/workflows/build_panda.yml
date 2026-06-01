@@ -1,4 +1,23 @@
-- name: Fetch panda build system
+name: Build Panda Firmware
+
+"on":
+  push:
+    paths:
+      - 'opendbc_repo/opendbc/safety/modes/mazda.h'
+      - 'panda/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch panda build system
         run: |
           git clone --depth=1 https://github.com/sunnyhaibin/panda.git panda_build
           cp panda_build/SConstruct panda/SConstruct
