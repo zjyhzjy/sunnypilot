@@ -1,21 +1,21 @@
-name: Build Panda Firmware
-
-on:
-  push:
-    paths:
-      - 'opendbc_repo/opendbc/safety/modes/mazda.h'
-      - 'panda/**'
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo with submodules
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.GITHUB_TOKEN }}
+- name: Fetch panda build system
+        run: |
+          git clone --depth=1 https://github.com/sunnyhaibin/panda.git panda_build
+          cp panda_build/SConstruct panda/SConstruct
+          cp panda_build/SConscript panda/SConscript
+          cp -r panda_build/board/stm32h7 panda/board/stm32h7
+          cp -r panda_build/board/crypto panda/board/crypto
+          cp -r panda_build/board/jungle panda/board/jungle
+          cp -r panda_build/board/body panda/board/body
+          cp -r panda_build/board/boards panda/board/boards
+          cp -r panda_build/board/sys panda/board/sys
+          cp -r panda_build/board/drivers panda/board/drivers
+          cp panda_build/board/main.c panda/board/main.c
+          cp panda_build/board/bootstub.c panda/board/bootstub.c
+          cp panda_build/board/can.h panda/board/can.h
+          cp panda_build/board/main_comms.h panda/board/main_comms.h
+          cp panda_build/board/health.h panda/board/health.h
+          cp panda_build/board/config.h panda/board/config.h
 
       - name: Install ARM GCC toolchain
         run: |
