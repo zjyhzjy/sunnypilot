@@ -94,7 +94,11 @@ class CAR(Platforms):
 
 
 class LKAS_LIMITS:
-  STEER_THRESHOLD = 15
+  STEER_THRESHOLD = 15       # low threshold — used for steerFaultTemporary / LKAS_BLOCK detection only
+  STEER_THRESHOLD_HIGH = 15  # high threshold — used for steeringPressed hysteresis override detection.
+                             # Requires deliberate sustained hand input (5 frames) to trigger override alert.
+                             # Tuned for CX-5 2022 EPS torque scale. If override not detecting real hand
+                             # input, lower toward 20. If still false-triggering on bumpy roads, raise toward 40.
   DISABLE_SPEED = 45    # kph
   ENABLE_SPEED = 52     # kph
 

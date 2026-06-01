@@ -53,7 +53,16 @@ class CarState(CarStateBase):
 
     ret.steeringAngleDeg = cp.vl["STEER"]["STEER_ANGLE"]
     ret.steeringTorque = cp.vl["STEER_TORQUE"]["STEER_TORQUE_SENSOR"]
-    ret.steeringPressed = abs(ret.steeringTorque) > LKAS_LIMITS.STEER_THRESHOLD
+    # Hysteresis on steeringPressed to prevent alert flashing and torque resistance
+    # during hand corrections on tight corners. Uses update_steering_pressed() from
+    # CarStateBase (same pattern as Hyundai, Ford, Tesla, Rivian):
+    #   - must exceed STEER_THRESHOLD_HIGH (30) for 5 consecutive frames → True
+    #   - must drop below STEER_THRESHOLD_HIGH for 5 consecutive frames → False
+    # This prevents brief bumpy-road torque spikes from triggering the override alert
+    # and stops openpilot fighting back against intentional hand corrections.
+    # STEER_THRESHOLD (15) is intentionally kept for steerFaultTemporary detection only.
+    ret.steeringPressed = self.update_steering_pressed(
+        abs(ret.steeringTorque) > LKAS_LIMITS.STEER_THRESHOLD_HIGH, 5)
 
     ret.steeringTorqueEps = cp.vl["STEER_TORQUE"]["STEER_TORQUE_MOTOR"]
     ret.steeringRateDeg = cp.vl["STEER_RATE"]["STEER_ANGLE_RATE"]
