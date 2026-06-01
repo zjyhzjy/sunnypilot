@@ -55,3 +55,4 @@ jobs:
         with:
           commit_message: "panda: recompile firmware with updated mazda.h limits"
           file_pattern: "panda/board/obj/**/*.bin"
+          add_options: "-f"
