@@ -1,0 +1,43 @@
+name: Build Panda Firmware
+
+on:
+  push:
+    paths:
+      - 'opendbc_repo/opendbc/safety/modes/mazda.h'
+      - 'panda/**'
+  workflow_dispatch:  # allow manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install ARM GCC toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi scons python3-pip
+
+      - name: Install Python dependencies
+        run: |
+          pip install scons pycryptodome
+
+      - name: Build panda firmware
+        run: |
+          cd panda
+          scons -j$(nproc)
+
+      - name: Copy compiled binary to repo
+        run: |
+          cp panda/board/obj/panda_h7/main.bin panda/board/obj/panda_h7/main.bin
+          cp panda/board/obj/bootstub.panda_h7.bin panda/board/obj/bootstub.panda_h7.bin
+
+      - name: Commit updated firmware binary
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "panda: recompile firmware with updated mazda.h limits"
+          file_pattern: "panda/board/obj/**/*.bin"
